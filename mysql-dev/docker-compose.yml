@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: devdb
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    ports:
+      - "3306:3306"
+    networks:
+      dev_mysql_net:
+        ipv4_address: 172.0.5.10
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-dev
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    networks:
+      dev_mysql_net:
+        ipv4_address: 172.0.5.11
+
+networks:
+  dev_mysql_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.0.5.0/24
